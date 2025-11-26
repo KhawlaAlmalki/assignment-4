@@ -213,4 +213,4 @@ This portfolio demonstrates strong understanding of modern front-end development
 - Accessible UI patterns
 - Clean and reusable CSS architecture
 
-The final result reflects thoughtful design, solid engineering, and respo
+The final result reflects thoughtful design, solid engineering, and responsible use of AI tools
