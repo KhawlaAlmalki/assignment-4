@@ -65,7 +65,7 @@ The site showcases my background, projects, experience, and achievements in a **
 
 <img src="assets/images/performance.png" width="420" />
 
-**Final Score: 99 (Mobile)**
+**Final Score: 99**
 
 * First Contentful Paint: **0.9 s**
 * Largest Contentful Paint: **1.8 s**
