@@ -230,7 +230,7 @@
                 <div class="p-ico">🧭</div>
                 <div>
                     <!-- Project Image Placeholder -->
-                    <img src="https://placehold.co/400x300/000000/ffffff?text=Solution+Hackathon" alt="Solution Hackathon">
+                    <img loading="lazy" src="https://placehold.co/400x300/000000/ffffff?text=Solution+Hackathon" alt="Solution Hackathon">
                     <h3>Solution Hackathon</h3>
                     <p>Co-led KFUPM's first international hackathon in parallel with UCL London. 500+ registrations, SAR 30,000 prizes; winners traveled for exchange showcases.</p>
                     <div class="tags">
@@ -247,7 +247,7 @@
                 <div class="p-ico">🏅</div>
                 <div>
                     <!-- Project Image Placeholder -->
-                    <img src="https://placehold.co/400x300/000000/ffffff?text=Dorm+attendance+solution" alt="Dorm attendance solution">
+                    <img loading="lazy" src="https://placehold.co/400x300/000000/ffffff?text=Dorm+attendance+solution" alt="Dorm attendance solution">
                     <h3>Dorm Attendance Solution</h3>
                     <p>Dorm attendance solution recognized by Aramco D&IT; presented to executives and proposed for campus implementation.</p>
                     <div class="tags">
@@ -263,7 +263,7 @@
                 <div class="p-ico">🕌</div>
                 <div>
                     <!-- Project Image Placeholder -->
-                    <img src="https://placehold.co/400x300/000000/ffffff?text=Interactive+digital+platform" alt="Interactive digital platform">
+                    <img loading="lazy" src="https://placehold.co/400x300/000000/ffffff?text=Interactive+digital+platform" alt="Interactive digital platform">
                     <h3>Interactive Cultural Tourism Platform</h3>
                     <p>Interactive digital platform to enhance cultural tourism; selected as a top finalist.</p>
                     <div class="tags">
@@ -415,16 +415,20 @@
             <form id="contactForm" novalidate>
                 <label for="name">Name</label>
                 <input id="name" required />
+                <p class="error" id="nameError"></p>
 
                 <label for="email">Email</label>
                 <input id="email" type="email" required />
+                <p class="error" id="emailError"></p>
 
                 <label for="message">Message</label>
                 <textarea id="message" rows="5" required></textarea>
+                <p class="error" id="messageError"></p>
 
                 <button class="btn send" type="submit">Send Message</button>
                 <p id="msg" class="muted" aria-live="polite"></p>
             </form>
+
         </div>
     </div>
 </section>

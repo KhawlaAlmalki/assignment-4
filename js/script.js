@@ -31,42 +31,86 @@ toggle.addEventListener('click', () => {
     toggle.textContent = dark ? '☀️' : '🌙';
 });
 
+// ============================
+// Contact Form: extra validation + persistence
+// ============================
+const form = document.getElementById("contactForm");
+const msg = document.getElementById("msg");
 
-// ============================
-// Simple Contact Form Feedback (front-end only)
-// ============================
-const form = document.getElementById('contactForm');
-const msg = document.getElementById('msg');
+const nameInput = document.getElementById("name");
+const emailInput = document.getElementById("email");
+const messageInput = document.getElementById("message");
+
+const nameError = document.getElementById("nameError");
+const emailError = document.getElementById("emailError");
+const messageError = document.getElementById("messageError");
+
 // Prefill saved name/email on load
 (function () {
-    const nameEl = document.getElementById('name');
-    const emailEl = document.getElementById('email');
-    if (!nameEl || !emailEl) return;
-
-    const savedName = localStorage.getItem('contact_name');
-    const savedEmail = localStorage.getItem('contact_email');
-    if (savedName) nameEl.value = savedName;
-    if (savedEmail) emailEl.value = savedEmail;
+    const savedName = localStorage.getItem("contact_name");
+    const savedEmail = localStorage.getItem("contact_email");
+    if (savedName) nameInput.value = savedName;
+    if (savedEmail) emailInput.value = savedEmail;
 })();
-form.addEventListener('submit', (e) => {
-    e.preventDefault(); // Prevent page refresh
 
-    if (!form.checkValidity()) {
-        msg.textContent = "Please fill all fields correctly.";
+function clearErrors() {
+    nameError.textContent = "";
+    emailError.textContent = "";
+    messageError.textContent = "";
+    msg.textContent = "";
+}
+
+function validateForm() {
+    clearErrors();
+    let valid = true;
+
+    const name = nameInput.value.trim();
+    const email = emailInput.value.trim();
+    const message = messageInput.value.trim();
+
+    // 1) Name: not empty and at least 3 characters
+    if (name.length < 3) {
+        nameError.textContent = "Please enter your full name (3+ characters).";
+        valid = false;
+    }
+
+    // 2) Email: custom pattern check (more than just type=email)
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(email)) {
+        emailError.textContent = "Please enter a valid email address.";
+        valid = false;
+    }
+
+    // 3) Message: minimum length and no links (simple spam check)
+    if (message.length < 15) {
+        messageError.textContent = "Please write at least 15 characters.";
+        valid = false;
+    } else if (message.toLowerCase().includes("http")) {
+        messageError.textContent = "Please remove links from your message.";
+        valid = false;
+    }
+
+    return valid;
+}
+
+form.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    if (!validateForm()) {
+        msg.textContent = "Please fix the highlighted fields.";
         return;
     }
 
-    msg.textContent = "Thanks! Your message was sent.";
-
-    // Save name and email for next visit (must be before reset!)
+    // Save name and email for next visit
     try {
-        localStorage.setItem('contact_name', document.getElementById('name').value.trim());
-        localStorage.setItem('contact_email', document.getElementById('email').value.trim());
-    } catch (e) {
-        console.warn("Couldn't save contact info:", e);
+        localStorage.setItem("contact_name", nameInput.value.trim());
+        localStorage.setItem("contact_email", emailInput.value.trim());
+    } catch (err) {
+        console.warn("Couldn't save contact info:", err);
     }
 
-    form.reset(); // Clear form fields
+    msg.textContent = "Thanks! Your message was sent.";
+    form.reset();
 });
 
 

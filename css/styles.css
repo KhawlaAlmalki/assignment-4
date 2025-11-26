@@ -593,3 +593,8 @@ footer {
     margin-bottom: 0.5rem;
 }
 
+.error {
+    color: #f66;
+    font-size: 0.8rem;
+    margin: 0.2rem 0 0.6rem;
+}
