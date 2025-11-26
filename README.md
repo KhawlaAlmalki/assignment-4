@@ -93,5 +93,5 @@ A full breakdown is available in:
 ## 🚀 Live Demo
 Explore the live version of the website here:
 
-🔗 **https://khawlaalmalki.github.io/assignment-3/**
+🔗 [**https://khawlaalmalki.github.io/assignment-3/**](https://khawlaalmalki.github.io/assignment-3/)
 
