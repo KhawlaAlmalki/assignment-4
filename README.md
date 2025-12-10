@@ -71,13 +71,6 @@ It is built with **HTML, CSS, and vanilla JavaScript** and structured to support
 - Pre-submission formatting of form data  
 - Backend-stub function that prepares payload  
 
-### 🟦 3. **Backend Stub / API Integration Structure**
-Architecture prepared for backend use:
-- Modular API handler  
-- Fetch wrapper  
-- Structured payload builder  
-- Error/success state management  
-
 ---
 
 # ⚡ Performance & Accessibility Enhancements
