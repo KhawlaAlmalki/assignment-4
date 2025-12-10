@@ -1,35 +1,39 @@
-# Technical Documentation – Personal Portfolio Website
+# Technical Documentation – Personal Portfolio Web Application (Assignment 4)
 
 ## 1. Introduction
-This document provides the **technical overview and implementation details** of the personal portfolio website developed for **Assignment 1 (Foundations & AI Integration)**. The project demonstrates the integration of **HTML, CSS, and JavaScript** to build a clean, responsive, and interactive portfolio.
+This document provides a detailed technical overview of the personal portfolio website developed across Assignments 1–4. The final version (Assignment 4) integrates responsive layout techniques, interactivity, state persistence, animations, and new features such as the downloadable CV button and improved contact form validation.
 
-The purpose of this documentation is to explain:
-- Website architecture and file structure
-- Implementation of main features
-- Design decisions and rationale
-- Testing, limitations, and compatibility
-- Responsible use of AI tools during development
+This documentation explains:
+
+- System architecture and structure
+- Major implementation details
+- Design decisions
+- Testing and known limitations
+- Responsible use of AI tools
 
 ---
 
 ## 2. System Overview
-The portfolio website is a **fully client-side static application** that runs entirely in the browser. No backend or database is required.
+The portfolio is a static, client-side web application built using HTML, CSS, and JavaScript. It requires no backend server or database.
 
-**Key functionalities include:**
-- Personal biography and introduction
-- Interactive Projects section with search, filter, and sort
-- Collapsible Experience timeline with animations
-- Contact form with validation and persistent input
-- **Dark/light mode** with saved user preference
-- Scroll-based reveal animations using `IntersectionObserver`
-- **Weather widget**: real-time temperature + emoji + live timer
-- Fully responsive layout across screen sizes
+Core capabilities include:
+
+- Introduction and About sections
+- Collapsible Experience timeline
+- Interactive Projects section
+- Contact form with improved validation
+- Downloadable CV button
+- Dark/light theme mode
+- Scroll reveal animations
+- Weather widget with live timer
+- Fully responsive design across all screen sizes
 
 ---
 
 ## 3. Repository Structure
+
 ```
-assignment-3/
+assignment-4/
 ├── README.md
 ├── index.html
 ├── css/
@@ -37,180 +41,186 @@ assignment-3/
 ├── js/
 │   └── script.js
 ├── assets/
-│   └── images/
+│   ├── images/
+│   └── cv/
 ├── docs/
 │   ├── ai-usage-report.md
 │   └── technical-documentation.md
+├── presentation/
+│   ├── slides.pdf
+│   └── demo-video.mp4
 └── .gitignore
 ```
+
+All JavaScript features (projects filtering, animations, weather, contact form logic, theme toggling, etc.) are contained within a single file: `script.js`.
 
 ---
 
 ## 4. Technology Stack
-- **HTML5** — semantic structure, accessibility
-- **CSS3** — Flexbox, Grid, custom variables, dark mode
-- **JavaScript (ES6)** — interactivity, state management, animations
-- **localStorage** — persistent state (theme, form, timeline)
-- **Open-Meteo API** — weather data
-- **AI Tools** — debugging, documentation refinement, concept explanation
+- HTML5 – semantic structure and accessible layouts
+- CSS3 – responsive design, variables, Grid, Flexbox
+- JavaScript (ES6) – event handling, DOM manipulation, animations
+- localStorage – persistence for theme, form inputs, timeline state
+- Open-Meteo API – live weather information
+- AI Tools (ChatGPT) – debugging guidance and documentation refinement
 
 ---
 
 ## 5. Implementation Details
 
-## 5.1 HTML
-The structure uses semantic tags for clarity and accessibility:
-- `<header>` Navigation bar + theme toggle
-- **Hero section** with headline and introductory content
-- **Weather widget** (fixed position) showing temperature, emoji, and timer
-- **About Me**: profile image + personal summary
-- **Experience Timeline**: collapsible cards
-- **Projects Section**: search/filter/sort UI + project cards
-- **Skills, Awards, Contact** sections
-- `<footer>` with dynamic year
+### 5.1 HTML Structure
+Semantic HTML organizes the portfolio into:
 
-Semantic structure improves SEO and screen-reader compatibility.
-
----
-
-## 5.2 CSS
-### Layout
-- **Flexbox**: navbar, header layout, general alignment
-- **Grid**: Projects grid, skills grid, awards section
-- **CSS Variables** for theme consistency (`--bg`, `--text`, `--card`, ...)
-
-### Responsive Design
-Breakpoints:
-- **700px** — tablet mode
-- **1024px** — desktop adjustments
-
-Grid columns and spacing adjust smoothly based on screen width.
-
-### Dark Mode
-Activated by a `.dark` class on `<html>`:
-- Uses variable swapping to change backgrounds, text, and card colors
-- Default mode: **dark**
-- User preference saved in `localStorage`
-
-### Animations
-Elements with `.reveal` animate using CSS transitions. JS adds the `.in` class when elements enter the viewport.
+- Header with navigation and theme toggle
+- Hero section with introduction and CV download button
+- Weather widget
+- About section
+- Collapsible timeline for Experience
+- Searchable and sortable Projects section
+- Skills and Awards
+- Contact form with validation
+- Footer with dynamic year
 
 ---
 
-## 5.3 JavaScript
+### 5.2 CSS Implementation
 
-### 1) Dark Mode Toggle
-- Updates color theme by toggling `.dark` class
-- Saves preference in `localStorage`
-- Applies saved theme on page load
+#### Layout & Responsiveness
+The site uses Flexbox and CSS Grid to structure content.  
+Media queries provide layouts for mobile, tablet, and desktop.
 
-### 2) Scroll Reveal Animation
-- Implemented using `IntersectionObserver`
-- Adds `.in` when an element becomes visible
-- Avoids heavy on-scroll event listeners
+#### Theme Management
+A `.dark` class toggles dark mode using CSS variables.  
+User preference is stored in localStorage.
 
-### 3) Projects Section Logic
-Supports:
-- Search
-- Category filtering
-- Sorting (A–Z, Z–A, date)
+#### Animations
+CSS transitions combined with JavaScript class toggling create reveal effects.
 
-Workflow:
-1. Load project cards into an array
-2. Apply filters based on UI inputs
-3. Re-render matching cards
-4. Display a fallback message if no results
+---
 
-### 4) Experience Collapse & Persistence
-- Each timeline card expands/collapses when clicked
-- Accessible via keyboard (Enter/Space)
-- Saves open/closed state to `localStorage`
-- Ensures consistency across page reloads
+### 5.3 JavaScript Implementation
+(All implemented inside one file: `script.js`.)
 
-### 5) Contact Form Validation
-- Prevents empty submissions
-- Validates email pattern
-- Displays error messages
-- Saves name + email to `localStorage`
-- Prefills saved values on next visit
+#### 1) Theme Toggle
+- Toggles `.dark` class
+- Saves theme in localStorage
+- Restores preference on load
 
-### 6) Dynamic Footer Year
-```js
-document.getElementById('year').textContent = new Date().getFullYear();
+#### 2) Reveal Animations
+- Implemented using IntersectionObserver
+- Adds `.in` class when elements enter the viewport
+
+#### 3) Projects Section
+Includes real-time search, category filters, and sorting options.
+
+Logic flow:
+```
+Load → Filter → Sort → Render → Display Results/Empty State
 ```
 
-### 7) Weather Widget
-Uses the **Open-Meteo API** to fetch real-time temperature.
+#### 4) Experience Timeline
+- Expand/collapse on click or keyboard
+- State persisted in localStorage
 
-Includes:
-- Emoji mapping (☀️, 🌧️, ⛅, 🌩️)
-- Temperature display
-- Live timer updated every second
+#### 5) Contact Form (Improved in Assignment 4)
+- Required-field and email validation
+- Inline error messages
+- Prevents empty submissions
+- Saves name/email to localStorage
+- Autofills fields on load
 
-Timer logic:
+#### 6) Download CV Button (Assignment 4 Enhancement)
+- Link-based download hosted in `/assets/cv/`
+- Styled for visibility and accessibility
+
+#### 7) Weather Widget
+Uses Open-Meteo API to:
+
+- Fetch temperature
+- Display text-based condition
+- Run a timer updated every second
+
+Example:
 ```js
 setInterval(() => {
     seconds++;
-    weatherDisplay.textContent = `${emoji} ${temp}°C | ${formatTime(seconds)}`;
+    weatherText.textContent = temp + " °C | " + formatTime(seconds);
 }, 1000);
+```
+
+#### 8) Dynamic Footer Year
+```js
+document.getElementById('year').textContent = new Date().getFullYear();
 ```
 
 ---
 
 ## 6. Design Decisions
-- **Minimal, Apple-inspired aesthetic**: rounded corners, clean spacing, soft shadows
-- Dark mode default to match modern trends
-- Fixed weather widget for personality and interactivity
-- Modular JavaScript for maintainability
-- CSS variables for consistent theming and simpler mode switching
-- Grid layouts for readability and scalability
+
+### Aesthetic Choices
+- Minimalistic, modern interface
+- Dark mode default
+- Consistent spacing, rounded corners, readable typography
+
+### Usability Enhancements
+- Project filters for better navigation
+- Collapsible timeline for reduced clutter
+- CV button for practical portfolio use
+
+### Maintainability
+- Centralized JS logic
+- CSS variables for global styling
+- Semantic HTML sectioning
 
 ---
 
 ## 7. Testing & Compatibility
-### Tested On
-**Browsers:** Chrome, Edge, Safari  
-**Devices:**
-- 1920×1080 desktop
-- MacBook Air/Pro
-- iPad
-- iPhone (Safari + Chrome)
 
-### Verified Working
-- Theme toggle persistence
-- Experience collapse persistence
-- Project search / filter / sort
-- Weather widget + timer
-- Scroll animations
-- Contact form memory
+### Browsers
+- Chrome
+- Edge
+- Safari
+
+### Devices
+- Windows desktop
+- MacBook
+- iPad
+- iPhone
+
+### Validated Behaviors
+- Dark mode persistence
+- Project filtering/search/sort
+- Timeline collapse persistence
+- Contact form validation and persistence
+- Weather widget
+- Reveal animations
 - Responsive layout
 
 ### Known Limitations
-- Contact form does not send real messages
-- Weather API may fail on slow networks
-- Changing timeline titles breaks saved collapse state
+- Weather API may be delayed on slow networks
 
 ---
 
 ## 8. AI Assistance Summary
-AI assistance (ChatGPT) was used to:
-- Explain programming concepts (IntersectionObserver, timers, localStorage)
-- Provide debugging help
-- Suggest UI/UX improvements
-- Refactor logic for maintainability
-- Improve documentation clarity
+AI was used to:
 
-All code was fully reviewed and rewritten to ensure originality and correctness.
+- Debug JavaScript
+- Explain browser APIs
+- Suggest UI and code improvements
+- Organize documentation
+
+All AI-generated outputs were reviewed and rewritten manually.
 
 ---
 
 ## 9. Conclusion
-This portfolio demonstrates strong understanding of modern front-end development, including:
-- Responsive layout techniques
-- JavaScript state management
-- Persistent storage with `localStorage`
-- Real-time API integration
-- Accessible UI patterns
-- Clean and reusable CSS architecture
+The project demonstrates mastery of:
 
-The final result reflects thoughtful design, solid engineering, and responsible use of AI tools
+- Responsive web design
+- JavaScript interactivity
+- State persistence
+- Real-time data handling
+- Performance optimization
+- Documentation and presentation
+
+Assignment 4 improvements, including the CV download button and enhanced contact form, complete the portfolio as a polished and professional web application.
