@@ -180,5 +180,5 @@ Full usage breakdown is in:
 
 # 🚀 Live Demo
 
-🔗 **https://khawlaalmalki.github.io/assignment-4/**  
+🔗 **[https://khawlaalmalki.github.io/assignment-4/](https://khawlaalmalki.github.io/assignment-4/)**  
 
