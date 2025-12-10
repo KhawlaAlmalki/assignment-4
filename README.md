@@ -24,7 +24,7 @@ It is built with **HTML, CSS, and vanilla JavaScript** and structured to support
 
 ---
 
-# ✨ Key Features (Final Version)
+# ✨ Key Features 
 
 ## 🧱 **Core Structure**
 - **About Me** – Profile image, bio, links  
