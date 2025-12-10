@@ -83,7 +83,7 @@ It is built with **HTML, CSS, and vanilla JavaScript** and structured to support
 
 ## 2. EmailJS Contact Form Integration  
 A fully functional client-side email system was added using EmailJS.
-<img width="807" height="310" alt="image" src="https://github.com/user-attachments/assets/64ad6e34-24cd-4f90-aa63-a7a292cf84fe" />
+<img width="700" height="310" alt="image" src="https://github.com/user-attachments/assets/64ad6e34-24cd-4f90-aa63-a7a292cf84fe" />
 
 ### Capabilities
 - Sends visitor messages directly to the portfolio owner  
