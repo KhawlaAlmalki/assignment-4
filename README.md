@@ -24,7 +24,7 @@ It is built with **HTML, CSS, and vanilla JavaScript** and structured to support
 
 ---
 
-# ✨ Key Features (Final Version)
+# ✨ Key Features 
 
 ## 🧱 **Core Structure**
 - **About Me** – Profile image, bio, links  
@@ -73,6 +73,36 @@ It is built with **HTML, CSS, and vanilla JavaScript** and structured to support
 
 ---
 
+
+# Assignment 4 Enhancements
+
+## 1. Download CV Button  
+- Added to the About section  
+- Initiates immediate PDF download  
+- Uses /assets/cv/ directory  
+
+## 2. EmailJS Contact Form Integration  
+A fully functional client-side email system was added using EmailJS.
+<img width="700" height="310" alt="image" src="https://github.com/user-attachments/assets/64ad6e34-24cd-4f90-aa63-a7a292cf84fe" />
+
+### Capabilities
+- Sends visitor messages directly to the portfolio owner  
+- No backend server required  
+- Async/Await-based email sending  
+- Error and success states with user feedback  
+- Disabled button during sending to prevent duplication  
+- URL detection and blocking for basic spam protection  
+
+### Implementation Notes
+- EmailJS SDK included via CDN in index.html  
+- Initialization and email sending logic inside script.js  
+- Template parameters: name, email, message  
+- Accessible ARIA live regions for feedback  
+
+This transforms the static contact form into a functional communication channel.
+
+---
+
 # ⚡ Performance & Accessibility Enhancements
 
 - Compressed/resized images  
@@ -99,24 +129,23 @@ It is built with **HTML, CSS, and vanilla JavaScript** and structured to support
 # 🧱 System Architecture
 
 ```
-root/
-│
+assignment-4/
+├── README.md
 ├── index.html
 ├── css/
 │   └── styles.css
 ├── js/
-│   ├── script.js
-│   ├── projects.js
-│   ├── weather.js
-│   ├── contact.js
-│   └── api.js
+│   └── script.js
 ├── assets/
 │   ├── images/
 │   └── cv/
 ├── docs/
-│   ├── technical-documentation.md
-│   └── ai-usage-report.md
-└── presentation/
+│   ├── ai-usage-report.md
+│   └── technical-documentation.md
+├── presentation/
+│   ├── slides.pdf
+│   └── demo-video.mp4
+└── .gitignore
 ```
 
 ---
@@ -151,5 +180,5 @@ Full usage breakdown is in:
 
 # 🚀 Live Demo
 
-🔗 **https://khawlaalmalki.github.io/assignment-4/**  
+🔗 **[https://khawlaalmalki.github.io/assignment-4/](https://khawlaalmalki.github.io/assignment-4/)**  
 
