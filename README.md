@@ -1,119 +1,155 @@
-# 🌐 Portfolio Website – Assignment 3
+# 🌐 Personal Portfolio Web Application – Assignment 4
+**Web Engineering (SWE363) – Final Enhanced Version**  
+**Student:** Khawlah Almalki 
 
-## 📖 Project Description
 
-This personal portfolio website was developed as part of **Assignments 1–3** in the Web Engineering course. It demonstrates progressive enhancement — from basic structure to advanced interactivity and client-side data persistence — using **HTML, CSS, and vanilla JavaScript**.
+This project represents the **culmination of Assignments 1–4**, evolving from a basic static layout into a **fully-featured personal portfolio web application** with interactive components, persistent client-side data, performance optimizations, and Assignment-4-specific enhancements, including a backend-ready architecture, improved form handling, and a downloadable CV feature.
 
-The site showcases my background, projects, experience, and achievements in a **modern, responsive, and interactive design**, following accessibility standards and clean-code practices.
-
----
-
-## ✨ Features
-
-### 🧱 Core Structure
-
-* **About Me** – Intro section with profile image and personal summary
-* **Projects** – Grid layout with project cards and descriptions
-* **Experience Timeline** – Vertical timeline with styled cards
-* **Skills & Awards** – Categorized lists and highlights
-* **Contact Form** – Validation + error messages
-* **Dark Mode** – System-aware theme with toggle
-* **Responsive Design** – Mobile-first using Flexbox & Grid
+The final deliverable demonstrates professional design, modular code structure, usability, responsiveness, and readiness for future backend expansion.
 
 ---
 
-### ⚙️ Interactive Enhancements
+# 🎨 Overview of the Web Application
 
-* **Dynamic Projects Section**
-  ✓ Search
-  ✓ Filter
-  ✓ Sort (A–Z, Z–A, date)
+The website presents key information about me:
 
-* **Experience Collapse & Persistence**
-  ✓ Expand/collapse
-  ✓ Keyboard accessible
-  ✓ Saves state with `localStorage`
+- Background & personal introduction  
+- Skillset and achievements  
+- Experience timeline  
+- Projects with sorting, searching, and filtering  
+- Downloadable résumé (new)  
+- Contact form with enhanced logic (new)  
 
-* **Contact Form Enhancements**
-  ✓ Field validation (custom rules)
-  ✓ Saves name + email to `localStorage`
-
-* **Scroll Animations**
-  ✓ Reveal effects via `IntersectionObserver`
-
-* **Weather Widget**
-  ✓ Live temperature
-  ✓ Emoji mapped to weather condition
-  ✓ Timer in `mm:ss` format
-
-* **Theme Persistence**
-  ✓ Saves user’s dark/light mode
-  ✓ Loads preference on every visit
+It is built with **HTML, CSS, and vanilla JavaScript** and structured to support future backend integration.
 
 ---
 
-## ⚡ Performance Optimization
+# ✨ Key Features (Final Version)
 
-* Compressed and resized large images (e.g., profile photo)
-* Lazy-loaded non-critical images
-* Added width/height attributes to avoid layout shift
-* Inlined a small critical CSS block for faster initial paint
-* Preloaded CSS to reduce render-blocking
-* Removed unused code and minimized rendering delays
-
-### 📊 Final Lighthouse Performance Score
-
-<img src="assets/images/performance.png" width="420" />
-
-**Final Score: 99**
-
-* First Contentful Paint: **0.9 s**
-* Largest Contentful Paint: **1.8 s**
-* Total Blocking Time: **0 ms**
-* Cumulative Layout Shift: **0**
+## 🧱 **Core Structure**
+- **About Me** – Profile image, bio, links  
+- **Projects Showcase** – Responsive grid, cards with metadata  
+- **Experience Timeline** – Chronological and collapsible  
+- **Skills & Awards** – Categorized and visually organized  
+- **Dark/Light Mode** – System-aware, toggle-based  
+- **Mobile-first Responsive Layout** – Flexbox + CSS Grid  
 
 ---
 
-## 🛠️ Setup Instructions
+## ⚙️ **Interactive & Dynamic Enhancements**
 
-1. Open your terminal
-2. Navigate to your preferred folder:
+### 🔍 Projects  
+- Search  
+- Category filtering  
+- Sorting (A–Z, Z–A, by date)  
+- Smooth animations & reveal effects  
 
-   ```bash
-   cd Documents
-   ```
-3. Clone the repository:
+### 📝 Experience Timeline  
+- Expand/collapse with keyboard support  
+- State saved using `localStorage`  
 
-   ```bash
-   git clone https://github.com/KhawlaAlmalki/assignment-3
-   ```
-4. Enter the project:
-
-   ```bash
-   cd assignment-3
-   ```
-5. Open `index.html` or use Live Server
-
-No installation required — static website.
+### 📩 Contact Form (Improved for Assignment 4)  
+- Custom validation rules  
+- Prevents incomplete/invalid submissions  
+- Inline error feedback  
+- Stores name/email in `localStorage`  
+- **Backend-ready submission hook (new)**  
+  JS now includes a structured `submitContactForm()` handler that can integrate with a real API later.
 
 ---
 
-## 🤖 AI Usage
+## 🆕 **Assignment 4 Enhancements**
 
-AI support (ChatGPT – GPT-5) was used for:
+### 🟩 1. **Download CV Button**
+- New prominent button in the About section  
+- Links to a hosted PDF in `/assets/cv/`  
+- Demonstrates a real-world portfolio practice  
 
-* Debugging JavaScript
-* Optimizing UI layout and responsiveness
-* Improving accessibility and animations
-* Generating documentation structure
-* Reviewing and explaining APIs (localStorage, IntersectionObserver, timers)
-
-All AI-assisted content was **reviewed, rewritten, and verified** manually.
-More details in:
-👉 `docs/ai-usage-report.md`
+### 🟧 2. **Better Contact Form Logic**
+- Rebuilt validation flow  
+- Cleaner error handling  
+- Pre-submission formatting of form data  
+- Backend-stub function that prepares payload  
 
 ---
 
-## 🚀 Live Demo
+# ⚡ Performance & Accessibility Enhancements
 
-🔗 [https://khawlaalmalki.github.io/assignment-3/](https://khawlaalmalki.github.io/assignment-3/)
+- Compressed/resized images  
+- Lazy-loaded noncritical assets  
+- Inline critical CSS  
+- Preloaded main stylesheet  
+- Reduced cumulative layout shift  
+- Removed unused JS and CSS  
+- Ensured accessible contrast, labels, ARIA roles  
+
+---
+
+# 📊 Lighthouse Score (Final)
+<img width="1904" height="1170" alt="image" src="https://github.com/user-attachments/assets/0fabc664-f930-4e74-b160-cdb115d66502" />
+
+**Performance: 99**  
+- FCP: 0.9s  
+- LCP: 1.8s  
+- TBT: 0ms  
+- CLS: 0  
+
+---
+
+# 🧱 System Architecture
+
+```
+root/
+│
+├── index.html
+├── css/
+│   └── styles.css
+├── js/
+│   ├── script.js
+│   ├── projects.js
+│   ├── weather.js
+│   ├── contact.js
+│   └── api.js
+├── assets/
+│   ├── images/
+│   └── cv/
+├── docs/
+│   ├── technical-documentation.md
+│   └── ai-usage-report.md
+└── presentation/
+```
+
+---
+
+# 🛠️ Installation & Setup
+
+```bash
+git clone https://github.com/KhawlaAlmalki/assignment-4
+cd assignment-4
+open index.html
+```
+
+No dependencies required — static website.
+
+---
+
+# 🤖 AI Usage Summary
+
+AI tools (ChatGPT & Claude) were used for:
+
+- Debugging JavaScript  
+- Improving form logic & validation  
+- Creating backend stub functions  
+- Enhancing readability and structure  
+- Improving animations & layout spacing  
+- Refining documentation wording  
+
+Full usage breakdown is in:  
+📄 `docs/ai-usage-report.md`
+
+---
+
+# 🚀 Live Demo
+
+🔗 **https://khawlaalmalki.github.io/assignment-4/**  
+
