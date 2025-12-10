@@ -129,24 +129,23 @@ This transforms the static contact form into a functional communication channel.
 # 🧱 System Architecture
 
 ```
-root/
-│
+assignment-4/
+├── README.md
 ├── index.html
 ├── css/
 │   └── styles.css
 ├── js/
-│   ├── script.js
-│   ├── projects.js
-│   ├── weather.js
-│   ├── contact.js
-│   └── api.js
+│   └── script.js
 ├── assets/
 │   ├── images/
 │   └── cv/
 ├── docs/
-│   ├── technical-documentation.md
-│   └── ai-usage-report.md
-└── presentation/
+│   ├── ai-usage-report.md
+│   └── technical-documentation.md
+├── presentation/
+│   ├── slides.pdf
+│   └── demo-video.mp4
+└── .gitignore
 ```
 
 ---
