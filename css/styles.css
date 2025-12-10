@@ -543,52 +543,54 @@ footer {
 }
 
 /* ==== Experience collapse (screen) ==== */
-.t-title { cursor: pointer; }
+.t-title {
+    cursor: pointer;
+}
+
 .t-title:focus {
     outline: 3px solid color-mix(in srgb, var(--brand) 35%, transparent);
     border-radius: 6px;
 }
+
 /* When collapsed, hide all except date & title */
-.t-card.collapsed > *:not(.t-date):not(.t-title) { display: none; }
-.t-card { transition: padding .2s ease; }
-.t-title { cursor: pointer; }
-.t-title:focus { outline: 3px solid color-mix(in srgb, var(--brand) 35%, transparent); border-radius: 6px; }
-.t-card.collapsed > *:not(.t-date):not(.t-title) { display: none; }
-.t-card { transition: padding .2s ease; }
+.t-card.collapsed > *:not(.t-date):not(.t-title) {
+    display: none;
+}
+
+.t-card {
+    transition: padding .2s ease;
+}
 
 #weather-card {
     position: fixed;
-    top: 738px;
-    left: 1280px;
+    bottom: 1rem;
+    right: 1rem;
     z-index: 9999;
     padding: 12px 16px;
     border-radius: 14px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     display: flex;
     align-items: center;
     gap: 10px;
-    width: auto; /* keeps it compact */
-    font-size:16px;
-}
-.api-cards {
-    padding: 1.5rem 0;                 /* مساحة عمودية معقولة */
-    background-color: var(--background);
+    width: auto;
+    font-size: 14px;
 }
 
-.api-container {
-    max-width: 700px;        /* يخليه بحجم جميل */
-    margin-left: 150px;          /* يصطف لليسار */
-    margin-right: auto;      /* يمنعه من التمركز */
-    display: block;          /* يمنع التوزيع على أعمدة */
+@media (max-width: 768px) {
+    #weather-card {
+        font-size: 12px;
+        padding: 8px 12px;
+    }
 }
-
-.Today-Insight {
-    width: 1170px;      /* حجم على قد المحتوى */
-    padding: 1.25rem 1.5rem;
-    border-radius: 16px;
+.joke-card {
+    max-width: 100%;
+    margin: 0 auto;
 }
 
 .card-header h3 {
-    font-size: 1rem;                   /* بدل 4px */
+    font-size: 1rem;
     font-weight: 600;
     margin-bottom: 0.5rem;
 }
@@ -597,4 +599,19 @@ footer {
     color: #f66;
     font-size: 0.8rem;
     margin: 0.2rem 0 0.6rem;
+}
+
+/* Weather error styling */
+#weather-error {
+    display: none;
+    color: #f66;
+    font-size: 10px;
+}
+
+/* Avatar image styling */
+.avatar img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
 }

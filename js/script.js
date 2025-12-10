@@ -5,59 +5,80 @@ document.getElementById('year').textContent = new Date().getFullYear();
 
 
 // ============================
-// Dark Mode Toggle (with persistence)
+// Dark Mode Toggle
 // ============================
-const toggle = document.getElementById('themeToggle');   // Button element
-const root = document.documentElement;                   // <html> element
+const toggle = document.getElementById('themeToggle');
+const root = document.documentElement;
 
 // Apply saved theme on load
-if (localStorage.getItem('theme') === 'dark') {
-    root.classList.add('dark');
-    toggle.textContent = '☀️';  // Switch icon to sun if dark mode is active
+try {
+    if (localStorage.getItem('theme') === 'dark') {
+        root.classList.add('dark');
+        toggle.textContent = '☀️';
+    }
+} catch (error) {
+    console.warn('Could not access localStorage:', error);
 }
 
 // Toggle dark mode on button click
 toggle.addEventListener('click', () => {
-    root.classList.toggle('dark');               // Add/remove .dark class
+    root.classList.toggle('dark');
     const dark = root.classList.contains('dark');
 
     // Save preference
-    localStorage.setItem('theme', dark ? 'dark' : 'light');
+    try {
+        localStorage.setItem('theme', dark ? 'dark' : 'light');
+    } catch (error) {
+        console.warn('Could not save theme preference:', error);
+    }
 
     // Update button icon
     toggle.textContent = dark ? '☀️' : '🌙';
 });
 
 // ============================
-// Contact Form: extra validation + persistence
+// Contact Form Validation & Email Sending
 // ============================
-const form = document.getElementById("contactForm");
-const msg = document.getElementById("msg");
+const form = document.getElementById('contactForm');
+const msg = document.getElementById('msg');
+const nameInput = document.getElementById('name');
+const emailInput = document.getElementById('email');
+const messageInput = document.getElementById('message');
+const nameError = document.getElementById('nameError');
+const emailError = document.getElementById('emailError');
+const messageError = document.getElementById('messageError');
 
-const nameInput = document.getElementById("name");
-const emailInput = document.getElementById("email");
-const messageInput = document.getElementById("message");
+// EmailJS Configuration
+const EMAILJS_CONFIG = {
+    PUBLIC_KEY: 'eLbIMz5q_TU2EHKfX',
+    SERVICE_ID: 'service_a9115es',
+    TEMPLATE_ID: 'template_ncuwt0c'
+};
 
-const nameError = document.getElementById("nameError");
-const emailError = document.getElementById("emailError");
-const messageError = document.getElementById("messageError");
-
-// Prefill saved name/email on load
-(function () {
-    const savedName = localStorage.getItem("contact_name");
-    const savedEmail = localStorage.getItem("contact_email");
-    if (savedName) nameInput.value = savedName;
-    if (savedEmail) emailInput.value = savedEmail;
-})();
-
-function clearErrors() {
-    nameError.textContent = "";
-    emailError.textContent = "";
-    messageError.textContent = "";
-    msg.textContent = "";
+// Initialize EmailJS
+if (typeof emailjs !== 'undefined' && EMAILJS_CONFIG.PUBLIC_KEY !== 'YOUR_PUBLIC_KEY') {
+    emailjs.init(EMAILJS_CONFIG.PUBLIC_KEY);
 }
 
-function validateForm() {
+// Prefill saved name/email on load
+try {
+    const savedName = localStorage.getItem('contact_name');
+    const savedEmail = localStorage.getItem('contact_email');
+    if (savedName) nameInput.value = savedName;
+    if (savedEmail) emailInput.value = savedEmail;
+} catch (error) {
+    console.warn('Could not load saved contact info:', error);
+}
+
+const clearErrors = () => {
+    nameError.textContent = '';
+    emailError.textContent = '';
+    messageError.textContent = '';
+    msg.textContent = '';
+    msg.className = 'muted';
+};
+
+const validateForm = () => {
     clearErrors();
     let valid = true;
 
@@ -65,49 +86,114 @@ function validateForm() {
     const email = emailInput.value.trim();
     const message = messageInput.value.trim();
 
-    // 1) Name: not empty and at least 3 characters
+    // Name validation
     if (name.length < 3) {
-        nameError.textContent = "Please enter your full name (3+ characters).";
+        nameError.textContent = 'Please enter your full name (3+ characters).';
         valid = false;
     }
 
-    // 2) Email: custom pattern check (more than just type=email)
+    // Email validation
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailPattern.test(email)) {
-        emailError.textContent = "Please enter a valid email address.";
+        emailError.textContent = 'Please enter a valid email address.';
         valid = false;
     }
 
-    // 3) Message: minimum length and no links (simple spam check)
+    // Message validation with spam check
     if (message.length < 15) {
-        messageError.textContent = "Please write at least 15 characters.";
+        messageError.textContent = 'Please write at least 15 characters.';
         valid = false;
-    } else if (message.toLowerCase().includes("http")) {
-        messageError.textContent = "Please remove links from your message.";
+    } else if (message.toLowerCase().includes('http')) {
+        messageError.textContent = 'Please remove links from your message.';
         valid = false;
     }
 
     return valid;
-}
+};
 
-form.addEventListener("submit", (e) => {
+form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
     if (!validateForm()) {
-        msg.textContent = "Please fix the highlighted fields.";
+        msg.textContent = '⚠️ Please fix the highlighted fields.';
+        msg.className = 'muted error';
         return;
     }
 
-    // Save name and email for next visit
-    try {
-        localStorage.setItem("contact_name", nameInput.value.trim());
-        localStorage.setItem("contact_email", emailInput.value.trim());
-    } catch (err) {
-        console.warn("Couldn't save contact info:", err);
+    // Check if EmailJS is configured
+    if (typeof emailjs === 'undefined') {
+        msg.textContent = '⚠️ Email service is not loaded. Please refresh the page.';
+        msg.className = 'muted error';
+        return;
     }
 
-    msg.textContent = "Thanks! Your message was sent.";
-    form.reset();
+    if (EMAILJS_CONFIG.PUBLIC_KEY === 'YOUR_PUBLIC_KEY') {
+        // Fallback: Show success message without actually sending
+        msg.textContent = '✓ Thanks! Your message was received (EmailJS not configured).';
+        msg.className = 'muted';
+
+        // Save contact info
+        try {
+            localStorage.setItem('contact_name', nameInput.value.trim());
+            localStorage.setItem('contact_email', emailInput.value.trim());
+        } catch (error) {
+            console.warn('Could not save contact info:', error);
+        }
+
+        form.reset();
+        return;
+    }
+
+    // Show loading state
+    const submitButton = form.querySelector('button[type="submit"]');
+    const originalButtonText = submitButton.textContent;
+    submitButton.disabled = true;
+    submitButton.textContent = 'Sending...';
+    msg.textContent = '📤 Sending your message...';
+    msg.className = 'muted';
+
+    try {
+        // Prepare email parameters
+        const templateParams = {
+            from_name: nameInput.value.trim(),
+            from_email: emailInput.value.trim(),
+            message: messageInput.value.trim(),
+            to_name: 'Khawlah Al-Malki'
+        };
+
+        // Send email using EmailJS
+        const response = await emailjs.send(
+            EMAILJS_CONFIG.SERVICE_ID,
+            EMAILJS_CONFIG.TEMPLATE_ID,
+            templateParams
+        );
+
+        if (response.status === 200) {
+            // Success
+            msg.textContent = '✓ Thanks! Your message was sent successfully.';
+            msg.className = 'muted';
+
+            // Save contact info for next time
+            try {
+                localStorage.setItem('contact_name', nameInput.value.trim());
+                localStorage.setItem('contact_email', emailInput.value.trim());
+            } catch (error) {
+                console.warn('Could not save contact info:', error);
+            }
+
+            // Reset form
+            form.reset();
+        }
+    } catch (error) {
+        // Error handling
+        console.error('Email send error:', error);
+        msg.textContent = '⚠️ Failed to send message. Please try again or email directly.';
+        msg.className = 'muted error';
+    } finally {
+        // Restore button state
+        submitButton.disabled = false;
+        submitButton.textContent = originalButtonText;
+    }
 });
 
 
@@ -182,7 +268,21 @@ const io = new IntersectionObserver((entries) => {
         empty.hidden = filtered.length > 0;
     }
 
-    searchInput.addEventListener("input", applyFilters);
+    // Debounce function to limit how often applyFilters runs
+    function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    }
+
+    // Debounced search input (300ms delay)
+    searchInput.addEventListener("input", debounce(applyFilters, 300));
     filterSelect.addEventListener("change", applyFilters);
     sortSelect.addEventListener("change", applyFilters);
 })();
@@ -204,18 +304,30 @@ document.querySelectorAll('.reveal').forEach(el => io.observe(el));
     });
 
     // 2) Persistence helpers
-    const STORAGE_KEY = "exp_collapsed_keys_v1";
+    const STORAGE_KEY = 'exp_collapsed_keys_v1';
     const keyFromTitle = (h) =>
-        (h.textContent || "")
+        (h.textContent || '')
             .trim().toLowerCase()
-            .replace(/\s+/g, "-")
-            .replace(/[^a-z0-9\-]/g, "");
+            .replace(/\s+/g, '-')
+            .replace(/[^a-z0-9\-]/g, '');
 
     const loadSet = () => {
-        try { return new Set(JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]")); }
-        catch { return new Set(); }
+        try {
+            return new Set(JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'));
+        } catch (error) {
+            console.warn('Could not load collapsed state:', error);
+            return new Set();
+        }
     };
-    const saveSet = (set) => localStorage.setItem(STORAGE_KEY, JSON.stringify([...set]));
+
+    const saveSet = (set) => {
+        try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify([...set]));
+        } catch (error) {
+            console.warn('Could not save collapsed state:', error);
+        }
+    };
+
     const collapsed = loadSet();
 
     // 3) Apply initial state from storage
@@ -260,98 +372,75 @@ document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 })();
 
 
-// ====================
-// WEATHER API
-// ====================
-function getWeatherEmoji(code) {
-    if (code === 0) return "☀️";                 // clear
-    if ([1, 2, 3].includes(code)) return "⛅";     // cloudy
-    if ([51, 53, 55].includes(code)) return "🌦️"; // drizzle
-    if ([61, 63, 65, 80, 81, 82].includes(code)) return "🌧️"; // rain
-    if ([71, 73, 75, 77, 85, 86].includes(code)) return "❄️"; // snow
-    if ([45, 48].includes(code)) return "🌫️";     // fog
-    if ([95, 96, 99].includes(code)) return "⛈️"; // thunder
+// ============================
+// Weather API with Timer
+// ============================
+const weatherDisplay = document.getElementById('weather-display');
+const weatherError = document.getElementById('weather-error');
+let seconds = 0;
+let weatherTimerInterval = null;
 
-    return "🌡️"; // default
-}
+// Get weather emoji based on WMO code
+const getWeatherEmoji = (code) => {
+    if (code === 0) return '☀️';
+    if ([1, 2, 3].includes(code)) return '⛅';
+    if ([51, 53, 55].includes(code)) return '🌦️';
+    if ([61, 63, 65, 80, 81, 82].includes(code)) return '🌧️';
+    if ([71, 73, 75, 77, 85, 86].includes(code)) return '❄️';
+    if ([45, 48].includes(code)) return '🌫️';
+    if ([95, 96, 99].includes(code)) return '⛈️';
+    return '🌡️';
+};
 
-async function fetchWeather() {
-    const weatherCard = document.getElementById('weather-card');
-    const weatherContent = document.getElementById('weather-content');
-    const weatherError = document.getElementById('weather-error');
+// Format time as mm:ss
+const formatTime = (totalSeconds) => {
+    const mins = Math.floor(totalSeconds / 60);
+    const secs = totalSeconds % 60;
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+};
 
+// Update weather display with temperature and timer
+const updateWeatherDisplay = (temp, emoji) => {
+    const formatted = formatTime(seconds);
+    weatherDisplay.textContent = `${emoji} ${temp}°C | ${formatted}`;
+};
+
+// Fetch weather from Open-Meteo API
+const fetchWeather = async () => {
     try {
-        // Using Open-Meteo API (no API key required)
-        const latitude = 26.1551; // Dhahran latitude
-        const longitude = 50.1655; // Dhahran longitude
+        // Clear existing interval to prevent memory leak
+        if (weatherTimerInterval) {
+            clearInterval(weatherTimerInterval);
+        }
 
+        const latitude = 26.1551;
+        const longitude = 50.1655;
         const response = await fetch(
-            `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,weather_code,relative_humidity_2m&temperature_unit=celsius&timezone=auto`
+            `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,weather_code&temperature_unit=celsius&timezone=auto`
         );
 
         if (!response.ok) throw new Error('Weather API request failed');
 
         const data = await response.json();
         const current = data.current;
-
-        // Convert weather code to description
-        const weatherDesc = getWeatherDescription(current.weather_code);
         const emoji = getWeatherEmoji(current.weather_code);
+        const temp = Math.round(current.temperature_2m);
 
-        weatherContent.innerHTML = `
-    <div class="weather-inline">
-        <span class="weather-emoji">${emoji}</span>
-        <span class="weather-temp">${Math.round(current.temperature_2m)}°C</span>
- 
-    </div>
-`;
+        updateWeatherDisplay(temp, emoji);
         weatherError.style.display = 'none';
 
-
-
-        weatherError.style.display = 'none';
+        // Update timer every second
+        weatherTimerInterval = setInterval(() => {
+            seconds++;
+            updateWeatherDisplay(temp, emoji);
+        }, 1000);
     } catch (error) {
-        weatherContent.innerHTML = '';
-        weatherError.textContent = 'Weather data is temporarily unavailable. Please try again later.';
+        weatherDisplay.textContent = 'Weather unavailable';
+        weatherError.textContent = 'Weather data is temporarily unavailable.';
         weatherError.style.display = 'block';
         console.error('Weather fetch error:', error);
     }
-}
-
-function getWeatherDescription(code) {
-    // WMO Weather interpretation codes
-    const descriptions = {
-        0: 'Clear sky',
-        1: 'Mainly clear',
-        2: 'Partly cloudy',
-        3: 'Overcast',
-        45: 'Foggy',
-        48: 'Depositing rime fog',
-        51: 'Light drizzle',
-        53: 'Moderate drizzle',
-        55: 'Dense drizzle',
-        61: 'Slight rain',
-        63: 'Moderate rain',
-        65: 'Heavy rain',
-        71: 'Slight snow',
-        73: 'Moderate snow',
-        75: 'Heavy snow',
-        77: 'Snow grains',
-        80: 'Slight rain showers',
-        81: 'Moderate rain showers',
-        82: 'Violent rain showers',
-        85: 'Slight snow showers',
-        86: 'Heavy snow showers',
-        95: 'Thunderstorm',
-        96: 'Thunderstorm with slight hail',
-        99: 'Thunderstorm with heavy hail'
-    };
-
-    return descriptions[code] || 'Unknown';
-}
-
-// Fetch weather on page load
-document.addEventListener('DOMContentLoaded', fetchWeather);
+};
 
 
 // ====================
@@ -373,7 +462,15 @@ async function fetchJoke() {
         const data = await response.json();
         const advice = data.slip.advice;
 
-        jokeContent.innerHTML = `<p style="font-size: 16px; font-weight: 500; line-height: 1.6;">"${advice}"</p>`;
+        // Use textContent to prevent XSS, then wrap in styled paragraph
+        const paragraph = document.createElement('p');
+        paragraph.style.fontSize = '16px';
+        paragraph.style.fontWeight = '500';
+        paragraph.style.lineHeight = '1.6';
+        paragraph.textContent = `"${advice}"`;
+
+        jokeContent.innerHTML = '';
+        jokeContent.appendChild(paragraph);
         jokeError.style.display = 'none';
     } catch (error) {
         jokeContent.innerHTML = '';
@@ -382,9 +479,6 @@ async function fetchJoke() {
         console.error('Advice fetch error:', error);
     }
 }
-
-// Fetch joke on page load
-document.addEventListener('DOMContentLoaded', fetchJoke);
 
 // Fetch new joke on button click
 newJokeBtn.addEventListener('click', fetchJoke);
@@ -398,8 +492,12 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         if (href !== '#' && document.querySelector(href)) {
             e.preventDefault();
             const target = document.querySelector(href);
+
+            // Respect user's motion preferences
+            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
             target.scrollIntoView({
-                behavior: 'smooth',
+                behavior: prefersReducedMotion ? 'auto' : 'smooth',
                 block: 'start'
             });
         }
@@ -409,37 +507,25 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 // ====================
 // PERFORMANCE OPTIMIZATION
 // ====================
-// Lazy load images if any are added
-if ('IntersectionObserver' in window) {
-    const imageObserver = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const img = entry.target;
-                img.src = img.dataset.src;
-                img.removeAttribute('data-src');
-                imageObserver.unobserve(img);
-            }
-        });
-    });
-
-    document.querySelectorAll('img[data-src]').forEach(img => {
-        imageObserver.observe(img);
-    });
-}// ============================
-// STATE: Show / Hide Experience
 // ============================
-
+// Show/Hide Experience Section
+// ============================
 const expBtn = document.getElementById('toggle-experience');
 const expSection = document.getElementById('experience');
 
-// Load state from storage
-let expHidden = localStorage.getItem('exp_hidden') === 'true';
+// Load saved state
+let expHidden = false;
+try {
+    expHidden = localStorage.getItem('exp_hidden') === 'true';
+} catch (error) {
+    console.warn('Could not access localStorage:', error);
+}
 
 // Apply state
-function renderExperience() {
+const renderExperience = () => {
     expSection.style.display = expHidden ? 'none' : '';
     expBtn.textContent = expHidden ? 'Show Experience' : 'Hide Experience';
-}
+};
 
 // Initial render
 renderExperience();
@@ -447,64 +533,21 @@ renderExperience();
 // Toggle logic
 expBtn.addEventListener('click', () => {
     expHidden = !expHidden;
-    localStorage.setItem('exp_hidden', expHidden);
+    try {
+        localStorage.setItem('exp_hidden', expHidden);
+    } catch (error) {
+        console.warn('Could not save to localStorage:', error);
+    }
     renderExperience();
 });
 
 // ============================
-// WEATHER + INLINE TIMER
+// Initialize on Page Load
 // ============================
+document.addEventListener('DOMContentLoaded', () => {
+    // Fetch weather data
+    fetchWeather();
 
-const weatherDisplay = document.getElementById("weather-display");
-
-// ---- Weather + Emoji -----
-function updateWeather(temp, emoji) {
-    // لما يجهز الطقس، نرسم النص لأول مرة
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    const timeSpent =
-        mins > 0 ? `${mins}m ${secs.toString().padStart(2, "0")}s` : `${secs}s`;
-
-    weatherDisplay.textContent = `${emoji} ${temp}°C | ${timeSpent}`;
-}
-
-// ---- Timer -----
-let seconds = 0;
-
-// Format → 00:00 (mm:ss)
-function formatTime(totalSeconds) {
-    const mins = Math.floor(totalSeconds / 60);
-    const secs = totalSeconds % 60;
-
-    const mm = mins.toString().padStart(2, "0");
-    const ss = secs.toString().padStart(2, "0");
-
-    return `${mm}:${ss}`;
-}
-
-// Update timer every second
-setInterval(() => {
-    seconds++;
-
-    const currentLeft = weatherDisplay.textContent.split("|")[0].trim();
-    if (!currentLeft) return; // if weather not loaded yet
-
-    const formatted = formatTime(seconds);
-
-    weatherDisplay.textContent = `${currentLeft} | ${formatted}`;
-}, 1000);
-
-// ---- Fetch Weather -----
-async function fetchWeather() {
-    try {
-        // Random emoji for example; use your own logic if needed
-        const emoji = "☀️";
-        const temperature = 16;
-
-        updateWeather(temperature, emoji);
-    } catch (e) {
-        weatherDisplay.textContent = "Weather unavailable";
-    }
-}
-
-fetchWeather();
+    // Fetch initial advice/joke
+    fetchJoke();
+});
