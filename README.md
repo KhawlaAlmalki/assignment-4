@@ -1,6 +1,6 @@
 # 🌐 Personal Portfolio Web Application – Assignment 4
 **Web Engineering (SWE363) – Final Enhanced Version**  
-**Student:** Khawlah Almalki
+**Student:** Khawlah Almalki 
 **ID:** 202247320
 
 This project represents the **culmination of Assignments 1–4**, evolving from a basic static layout into a **fully-featured personal portfolio web application** with interactive components, persistent client-side data, performance optimizations, and Assignment-4-specific enhancements, including a backend-ready architecture, improved form handling, and a downloadable CV feature.
